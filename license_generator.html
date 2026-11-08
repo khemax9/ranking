@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Best - Admin License Key Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            background: #1E1E1E;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .badge {
+            background: #FFE500;
+            color: #000000;
+            font-weight: 900;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        p.subtitle {
+            color: #888888;
+            font-size: 13px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #CCCCCC;
+            margin-bottom: 8px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #2C2C2C;
+            border: 1px solid #444444;
+            border-radius: 10px;
+            color: #FFFFFF;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: #FFE500;
+        }
+        .btn-generate {
+            width: 100%;
+            padding: 14px;
+            background: #FFE500;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-generate:hover {
+            opacity: 0.92;
+        }
+        .btn-generate:active {
+            transform: scale(0.99);
+        }
+        .result-container {
+            margin-top: 24px;
+            padding: 18px;
+            background: #181818;
+            border-radius: 12px;
+            border: 1px solid #333333;
+            display: none;
+        }
+        .result-title {
+            font-size: 12px;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .key-box {
+            background: #000000;
+            padding: 12px;
+            border-radius: 8px;
+            color: #00E676;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            font-weight: bold;
+            word-break: break-all;
+            text-align: center;
+            border: 1px dashed #00E676;
+            margin-bottom: 12px;
+        }
+        .btn-copy {
+            width: 100%;
+            padding: 10px;
+            background: #333333;
+            color: #FFFFFF;
+            border: 1px solid #555555;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-copy:hover {
+            background: #444444;
+        }
+        .info-pill {
+            font-size: 12px;
+            color: #AAA;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <div class="badge">Offline License Tool</div>
+        <h1>Ranking Best</h1>
+        <p class="subtitle">Generate Device-Locked Monthly &amp; Test Keys</p>
+    </div>
+
+    <div class="form-group">
+        <label for="deviceId">Buyer Device ID (from user phone):</label>
+        <input type="text" id="deviceId" placeholder="e.g. 9B4A-71FC" maxlength="12" autofocus>
+    </div>
+
+    <div class="form-group">
+        <label for="duration">Subscription Duration / Test Mode:</label>
+        <select id="duration">
+            <option value="60s">⚡ 60 Seconds (Test Mode)</option>
+            <option value="120s">⚡ 2 Minutes (Test Mode)</option>
+            <option value="5m">⚡ 5 Minutes (Test Mode)</option>
+            <option value="30d" selected>1 Month (30 Days)</option>
+            <option value="60d">2 Months (60 Days)</option>
+            <option value="90d">3 Months (90 Days)</option>
+            <option value="180d">6 Months (180 Days)</option>
+            <option value="365d">1 Year (365 Days)</option>
+        </select>
+    </div>
+
+    <button class="btn-generate" onclick="generateKey()">Generate Secret Key</button>
+
+    <div class="result-container" id="resultContainer">
+        <div class="result-title">Generated License Key:</div>
+        <div class="key-box" id="keyBox">RB-XXXXXXXX-YYYYMMDD-XXXXXXXX</div>
+        <button class="btn-copy" id="btnCopy" onclick="copyKey()">📋 Copy Key for Buyer</button>
+        <div class="info-pill" id="infoPill">Valid until: -</div>
+    </div>
+</div>
+
+<script>
+    const MASTER_SECRET = "RANKING_BEST_OFFLINE_SECRET_2026_PRO";
+
+    async function computeHmacSha256(secret, message) {
+        const enc = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+            "raw",
+            enc.encode(secret),
+            { name: "HMAC", hash: "SHA-256" },
+            false,
+            ["sign"]
+        );
+        const signature = await crypto.subtle.sign("HMAC", key, enc.encode(message));
+        const hashArray = Array.from(new Uint8Array(signature));
+        return hashArray.slice(0, 4).map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    async function generateKey() {
+        const rawDeviceId = document.getElementById("deviceId").value.trim().toUpperCase();
+        const cleanDeviceId = rawDeviceId.replace(/[^A-F0-9]/g, '');
+
+        if (cleanDeviceId.length !== 8) {
+            alert("Please enter a valid 8-character Device ID (e.g. 9B4A-71FC)");
+            return;
+        }
+
+        const durationVal = document.getElementById("duration").value;
+        const now = new Date();
+        let targetDate = new Date();
+        let expiryStr = "";
+        let durationLabel = "";
+
+        if (durationVal.endsWith("s")) {
+            // Second-based test mode
+            const seconds = parseInt(durationVal.replace("s", ""), 10);
+            targetDate = new Date(now.getTime() + seconds * 1000);
+            
+            const Y = targetDate.getFullYear();
+            const M = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const D = String(targetDate.getDate()).padStart(2, '0');
+            const h = String(targetDate.getHours()).padStart(2, '0');
+            const m = String(targetDate.getMinutes()).padStart(2, '0');
+            const s = String(targetDate.getSeconds()).padStart(2, '0');
+            expiryStr = `${Y}${M}${D}${h}${m}${s}`;
+            durationLabel = `${seconds} Seconds (Test Mode)`;
+        } else if (durationVal.endsWith("m")) {
+            // Minute-based test mode
+            const minutes = parseInt(durationVal.replace("m", ""), 10);
+            targetDate = new Date(now.getTime() + minutes * 60 * 1000);
+            
+            const Y = targetDate.getFullYear();
+            const M = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const D = String(targetDate.getDate()).padStart(2, '0');
+            const h = String(targetDate.getHours()).padStart(2, '0');
+            const m = String(targetDate.getMinutes()).padStart(2, '0');
+            const s = String(targetDate.getSeconds()).padStart(2, '0');
+            expiryStr = `${Y}${M}${D}${h}${m}${s}`;
+            durationLabel = `${minutes} Minutes (Test Mode)`;
+        } else {
+            // Day-based monthly / yearly mode
+            const days = parseInt(durationVal.replace("d", ""), 10);
+            targetDate.setDate(targetDate.getDate() + days);
+            
+            const Y = targetDate.getFullYear();
+            const M = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const D = String(targetDate.getDate()).padStart(2, '0');
+            expiryStr = `${Y}${M}${D}`;
+            durationLabel = `${days} Days`;
+        }
+
+        const payload = `${cleanDeviceId}-${expiryStr}`;
+        const checksum = await computeHmacSha256(MASTER_SECRET, payload);
+
+        const licenseKey = `RB-${cleanDeviceId}-${expiryStr}-${checksum}`;
+
+        document.getElementById("keyBox").innerText = licenseKey;
+        document.getElementById("infoPill").innerText = `Expires: ${targetDate.toLocaleTimeString()} ${targetDate.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })} (${durationLabel}) • Locked to: ${rawDeviceId}`;
+        document.getElementById("resultContainer").style.display = "block";
+    }
+
+    function copyKey() {
+        const keyText = document.getElementById("keyBox").innerText;
+        navigator.clipboard.writeText(keyText).then(() => {
+            const btn = document.getElementById("btnCopy");
+            btn.innerText = "✓ Key Copied!";
+            btn.style.background = "#00E676";
+            btn.style.color = "#000000";
+            setTimeout(() => {
+                btn.innerText = "📋 Copy Key for Buyer";
+                btn.style.background = "#333333";
+                btn.style.color = "#FFFFFF";
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
